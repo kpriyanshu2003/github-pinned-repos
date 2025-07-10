@@ -1,23 +1,22 @@
 # 📌 Pinned
 
-![Uptime](https://uptime.berrysauce.dev/api/badge/8/uptime)
-
 Pinned is an API that returns pinned repositories for the requested username from GitHub. This is ideal for creating a "Pinned Repositories" section on your website.
 
 ```http
-GET  https://pinned.berrysauce.dev/get/username
+GET  https://github-pinned.kpriyanshu.workers.dev/username
 ```
 
 Replace `username` with your GitHub username. Pinned will return the JSON in the following format:
 
 ```json
 [
-    { 
-        "author": "berrysauce",
-        "name": "whatdevsneed",
+    {
+        "author": "kpriyanshu2003",
+        "name": "repo-name",
         "description": "🧰 Discover new developer tools",
-        "language": "HTML",
-        "stars": 58,
+        "language": "JavaScript",
+        "languageColor": "#f1e05a",
+        "stars": 0,
         "forks": 0
     },
     ...
@@ -30,7 +29,7 @@ If Pinned runs into an error, it will return a response with a response code oth
 
 ```json
 {
-    "detail": "Error parsing HTML"
+  "detail": "Error parsing HTML"
 }
 ```
 

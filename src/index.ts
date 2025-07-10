@@ -4,25 +4,16 @@ import { cache } from "hono/cache";
 import { prettyJSON } from "hono/pretty-json";
 import { secureHeaders } from "hono/secure-headers";
 import { StatusCode } from "hono/utils/http-status";
-
 import { parse, HTMLElement } from "node-html-parser";
 
-type Bindings = {
-  dev?: boolean;
-};
+type Bindings = { dev?: boolean };
 
 const app = new Hono<{ Bindings: Bindings }>();
 
 // Configure middleware for JSON formatting, security headers and CORS
 app.use("*", prettyJSON({ space: 4 }));
 app.use("*", secureHeaders());
-app.use(
-  "*",
-  cors({
-    origin: "*",
-    allowMethods: ["GET"],
-  })
-);
+app.use("*", cors({ origin: "*", allowMethods: ["GET"] }));
 
 // Enable 5 minute caching for all routes in production
 app.use("*", async (c, next) => {
@@ -37,7 +28,10 @@ app.use("*", async (c, next) => {
 
 // Redirect root path to GitHub repository
 app.get("/", async (c) => {
-  return c.redirect("https://github.com/berrysauce/pinned", 301);
+  return c.redirect(
+    "https://github.com/kpriyanshu2003/github-pinned-repos",
+    301
+  );
   // return c.text("📌 PINNED\nPlease use /get/username to get the pinned repositories of a GitHub user")
 });
 
@@ -83,17 +77,18 @@ function parseRepository(root: HTMLElement, el: HTMLElement): RepositoryData {
     description:
       el.querySelector("p.pinned-item-desc")?.text?.replace(/\n/g, "").trim() ||
       "",
-    language:
-      languageSpan?.text || "",
-    languageColor: 
-      languageColorSpan?.getAttribute("style")?.match(/background-color:\s*([^;]+)/)?.[1] || "",
+    language: languageSpan?.text || "",
+    languageColor:
+      languageColorSpan
+        ?.getAttribute("style")
+        ?.match(/background-color:\s*([^;]+)/)?.[1] || "",
     stars: parseMetric(0),
     forks: parseMetric(1),
   };
 }
 
 // Fetch and parse pinned repositories for a given GitHub username
-app.get("/get/:username", async (c) => {
+app.get("/:username", async (c) => {
   const username = c.req.param("username");
 
   // Fetch the GitHub profile HTML
@@ -108,7 +103,10 @@ app.get("/get/:username", async (c) => {
   }
 
   // Handle common HTTP error responses
-  const errorResponses: Record<number, { status: StatusCode; message: string }> = {
+  const errorResponses: Record<
+    number,
+    { status: StatusCode; message: string }
+  > = {
     404: { status: 404, message: "User not found" },
     429: { status: 429, message: "Origin rate limit exceeded" },
   };
@@ -135,9 +133,7 @@ app.get("/get/:username", async (c) => {
     return c.json(pinned_repos);
   } catch {
     c.status(500);
-    return c.json({
-      detail: "Error parsing user",
-    });
+    return c.json({ detail: "Error parsing user" });
   }
 });
 

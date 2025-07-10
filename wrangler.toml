@@ -1,4 +1,4 @@
-name = "berrysauce-pinned"
+name = "github-pinned"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
 
