@@ -50,3 +50,7 @@ Pinned is deployed on [Cloudflare Workers](https://workers.cloudflare.com/). To 
 ```
 npm run deploy
 ```
+
+## Credits
+
+- [Paul Haedrich](https://github.com/berrysauce)
