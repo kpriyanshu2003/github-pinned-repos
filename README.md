@@ -1,4 +1,4 @@
-# 📌 Pinned
+# 📌 Github Pinned
 
 Pinned is an API that returns pinned repositories for the requested username from GitHub. This is ideal for creating a "Pinned Repositories" section on your website.
 
