@@ -1,14 +1,33 @@
 {
+  "name": "github-pinned-repos",
+  "version": "1.0.0",
+  "description": "Fetch GitHub pinned repositories for any user",
+  "main": "dist/lib.js",
+  "types": "dist/lib.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/lib.js",
+      "require": "./dist/lib.cjs",
+      "types": "./dist/lib.d.ts"
+    }
+  },
+  "files": [
+    "dist/lib.js",
+    "dist/lib.cjs",
+    "dist/lib.d.ts"
+  ],
   "scripts": {
+    "build": "tsc",
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
-    "hono": "^4.6.15",
     "node-html-parser": "^7.0.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230914.0",
+    "hono": "^4.6.15",
+    "typescript": "^5.3.3",
     "wrangler": "^4.13.2"
   }
 }

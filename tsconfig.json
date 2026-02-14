@@ -5,13 +5,12 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "lib": [
-      "esnext"
-    ],
-    "types": [
-      "@cloudflare/workers-types"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "declaration": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "lib": ["esnext"],
+    "types": ["@cloudflare/workers-types"]
   },
+  "include": ["src/lib.ts"],
+  "exclude": ["node_modules", "dist"]
 }
