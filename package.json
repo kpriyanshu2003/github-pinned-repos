@@ -1,19 +1,17 @@
 {
-  "name": "github-pinned-repos",
+  "name": "@kpriyanshu2003/github-pinned-repos",
   "version": "1.0.0",
   "description": "Fetch GitHub pinned repositories for any user",
   "main": "dist/lib.js",
   "types": "dist/lib.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/lib.js",
-      "require": "./dist/lib.cjs",
-      "types": "./dist/lib.d.ts"
+      "types": "./dist/lib.d.ts",
+      "import": "./dist/lib.js"
     }
   },
   "files": [
     "dist/lib.js",
-    "dist/lib.cjs",
     "dist/lib.d.ts"
   ],
   "scripts": {
