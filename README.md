@@ -1,12 +1,27 @@
 # 📌 Github Pinned Repos
 
-Pinned is an API that returns pinned repositories for the requested username from GitHub. This is ideal for creating a "Pinned Repositories" section on your website.
+Fetch GitHub pinned repositories for any user. Available as both an **npm package** and a **Cloudflare Workers API**.
 
-```http
-GET  https://github-pinned.kpriyanshu.workers.dev/username
+This project scrapes the pinned repositories from a user's GitHub profile page and returns structured data about each repository, including the name, description, primary language, star count, and fork count.
+
+## 📦 NPM Package
+
+Install the package:
+
+```bash
+npm install @kpriyanshu2003/github-pinned-repos
 ```
 
-Replace `username` with your GitHub username. Pinned will return the JSON in the following format:
+### Usage
+
+```javascript
+import { getPinnedRepos } from "@kpriyanshu2003/github-pinned-repos";
+
+const repos = await getPinnedRepos("kpriyanshu2003");
+console.log(repos);
+```
+
+### Response Format
 
 ```json
 [
@@ -23,33 +38,76 @@ Replace `username` with your GitHub username. Pinned will return the JSON in the
 ]
 ```
 
+### Error Handling
+
+```javascript
+try {
+  const repos = await getPinnedRepos("username");
+} catch (error) {
+  console.error(error.message); // "User not found" | "Origin rate limit exceeded" | "Error parsing user"
+}
+```
+
+---
+
+## 🚀 Cloudflare Workers API
+
+Deploy the included Hono API to Cloudflare Workers for a REST endpoint.
+
+### Query the API
+
+```http
+GET https://github-pinned.kpriyanshu.workers.dev/:username
+```
+
+Replace `:username` with a GitHub username. Returns the same JSON format as the npm package.
+
 You can add `?pretty` at the end of your request to get a formatted response.
 
-If Pinned runs into an error, it will return a response with a response code other than `200` and the following format:
+### Error Responses
+
+If an error occurs, the API returns a non-200 status code with:
 
 ```json
 {
-  "detail": "Error parsing HTML"
+  "detail": "Error message"
 }
 ```
 
 > [!NOTE]  
-> This API has a 5 minute cache in place to reduce requests to the origin. With this said, it might take a moment for your pinned repositories to update.
+> The API has a 5-minute cache in place to reduce requests to GitHub. Pinned repository updates may take a moment to reflect.
 
-## Development
+---
 
-Clone the repository, `cd` into it and run the following commands to install dependencies and run the code:
+## 🛠️ Development & Self-Hosting
 
-```
+### Setup
+
+Clone the repository and install dependencies:
+
+```bash
 npm install
+```
+
+### Local Development
+
+Run the Hono dev server:
+
+```bash
 npm run dev
 ```
 
-Pinned is deployed on [Cloudflare Workers](https://workers.cloudflare.com/). To deploy Pinned, run the following command:
+### Deploy to Cloudflare Workers
 
-```
+Deploy your own instance:
+
+```bash
 npm run deploy
 ```
+
+You'll need a Cloudflare account and be authenticated with `wrangler`.
+
+---
 
 ## Credits
 
