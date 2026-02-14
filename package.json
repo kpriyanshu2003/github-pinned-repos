@@ -1,6 +1,6 @@
 {
   "name": "@kpriyanshu2003/github-pinned-repos",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fetch GitHub pinned repositories for any user",
   "main": "dist/lib.js",
   "types": "dist/lib.d.ts",
