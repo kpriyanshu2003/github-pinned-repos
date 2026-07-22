@@ -35,9 +35,10 @@ app.get("/", async (c) => {
 // Fetch and parse pinned repositories for a given GitHub username
 app.get("/:username", async (c) => {
   const username = c.req.param("username");
+  const getRepo = c.req.query("getRepo") != undefined;
 
   try {
-    const pinned_repos = await getPinnedRepos(username);
+    const pinned_repos = await getPinnedRepos(username, getRepo);
     return c.json(pinned_repos);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

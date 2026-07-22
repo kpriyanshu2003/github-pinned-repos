@@ -23,6 +23,8 @@ console.log(repos);
 
 ### Response Format
 
+Basic Response:
+
 ```json
 [
     {
@@ -35,6 +37,23 @@ console.log(repos);
         "forks": 0
     },
     ...
+]
+```
+
+Detailed Response (with getRepo):
+
+```json
+[
+  {
+    "author": "kpriyanshu2003",
+    "name": "repo-name",
+    "description": "🧰 Discover new developer tools",
+    "language": "JavaScript",
+    "languageColor": "#f1e05a",
+    "stars": 0,
+    "forks": 0,
+    "data": "GitHub REST API, get repository"
+  }
 ]
 ```
 
@@ -57,10 +76,12 @@ Deploy the included Hono API to Cloudflare Workers for a REST endpoint.
 ### Query the API
 
 ```http
-GET https://github-pinned.kpriyanshu.workers.dev/:username
+GET https://github-pinned.kpriyanshu.workers.dev/:username?getRepo&pretty
 ```
 
 Replace `:username` with a GitHub username. Returns the same JSON format as the npm package.
+
+Add `?getRepo` at the end to also fetch the repository information (takes slighly longer).
 
 You can add `?pretty` at the end of your request to get a formatted response.
 

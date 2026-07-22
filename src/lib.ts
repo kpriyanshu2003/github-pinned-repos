@@ -1,17 +1,6 @@
+import { RepositoryData, GitHubRepository } from "./types";
 import { parse, HTMLElement } from "node-html-parser";
-
-/**
- * Represents a GitHub repository with pinned status
- */
-export interface RepositoryData {
-  author: string;
-  name: string;
-  description: string;
-  language: string;
-  languageColor?: string;
-  stars?: number;
-  forks?: number;
-}
+import { env } from "cloudflare:workers";
 
 /**
  * Parse a single repository element from GitHub HTML
@@ -58,15 +47,39 @@ function parseRepository(root: HTMLElement, el: HTMLElement): RepositoryData {
 }
 
 /**
+ * Fetch repository data from GitHub for a given username and parse pinned repositories
+ */
+async function fetchRepositoryData(
+  username: string,
+  repo: string,
+): Promise<GitHubRepository> {
+  const response = await fetch(
+    `https://api.github.com/repos/${username}/${repo}`,
+    {
+      headers: {
+        Accept: "application/vnd.github+json",
+        // @ts-ignore-next-line
+        "User-Agent": env.gh_username + "/" + env.app_name,
+      },
+    },
+  );
+
+  const repository: GitHubRepository = await response.json();
+  return repository;
+}
+
+/**
  * Fetch and parse pinned repositories for a given GitHub username
  *
  * @param username - GitHub username
+ * @param getRepo - Whether to fetch repository data
  * @returns Array of pinned repositories
  * @throws Error if user not found or other network issues
  */
 export async function getPinnedRepos(
   username: string,
-): Promise<RepositoryData[]> {
+  getRepo: boolean,
+): Promise<any> {
   const request = await fetch(`https://github.com/${username}`);
 
   if (request.status === 404) {
@@ -87,9 +100,17 @@ export async function getPinnedRepos(
   try {
     const pinned_repos = root
       .querySelectorAll(".js-pinned-item-list-item")
-      .map((el) => parseRepository(root, el));
+      .map(async (el) => {
+        const repoInfo = parseRepository(root, el);
+        const { author, name } = repoInfo;
+        const data = getRepo
+          ? await fetchRepositoryData(author, name)
+          : undefined;
 
-    return pinned_repos;
+        return { ...repoInfo, data };
+      });
+
+    return Promise.all(pinned_repos);
   } catch {
     throw new Error("Error parsing user");
   }

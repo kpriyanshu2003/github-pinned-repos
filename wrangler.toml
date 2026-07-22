@@ -1,3 +1,8 @@
 name = "github-pinned-repos"
 main = "src/index.ts"
-compatibility_date = "2026-02-01"
+compatibility_date = "2026-07-22"
+
+
+[vars]
+gh_username = "kpriyanshu2003"
+app_name = "github-pinned-repos"
